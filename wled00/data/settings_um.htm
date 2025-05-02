@@ -312,7 +312,7 @@
 
 		if (fromPicker) {
 			const col = d.getElementsByName(objname);
-			for (let i = 0; i < collection.length; i++) {
+			for (let i = 0; i < col.length; i++) {
 			  if (col[i].type !== "hidden") {
 				col[i].value = newval.slice(1).toUpperCase();
 				return;
