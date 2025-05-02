@@ -550,6 +550,12 @@ public:
         oappend(F("addInfo('")); oappend(FPSTR(_name)); oappend(F(":Overlay Enabled")); oappend(F("',1,'<br><i>(FL: First Led; LL: Last Led)</i>');"));
         oappend(F("addInfo('")); oappend(FPSTR(_name)); oappend(F(":H Color")); oappend(F("',1,'<br><i>(all colors in RRGGBB hex format)</i>');"));
 
+        oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','H Color');"));
+        oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','M Unit Color');"));
+        oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','M Tens Color');"));
+        oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','S Unit Color');"));
+        oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','S Tens Color');"));
+
         // The following lines add dropdowns for configuring the clock's appearance and behavior.
         oappend(F("dd=addDropdown('"));
         oappend(FPSTR(_name));
