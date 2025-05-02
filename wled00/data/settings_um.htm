@@ -264,6 +264,67 @@
 	function addHB(um) {
 		addI(um + ':help',0,`<button onclick="location.href='https://kno.wled.ge/usermods/${um}'" type="button">?</button>`);
 	}
+
+
+	/**
+	 * Add a color picker to a usermod's input field.
+	 * @param {string} um - usermod name
+	 * @param {string} [fld] - field name within the usermod
+	 * @returns {Element|null} - the created color picker element, or null if no matching field found
+	 */
+	function addCP(um,fld) {
+		if (typeof(fld) === "string") {	// parameter from usermod (field name)
+			um += ":"+fld;
+		}
+		let arr = d.getElementsByName(um);
+		let idx = arr[0].type==="hidden"?1:0; // ignore hidden field
+
+		let inp = arr[idx];
+		if (inp && inp.tagName === "INPUT" && (inp.type === "text" || inp.type === "number")) {  // may also use nodeName
+			let v = inp.value;
+			let n = inp.name;
+			let c = n + "-colpicker"; 
+			let pick = cE('input');
+			pick.setAttribute("type", "color");
+			pick.setAttribute("name", c);
+			pick.setAttribute("value", "#" + v);
+			pick.setAttribute("style", "");
+			pick.setAttribute("onchange", "setColorPicker('"+ n + "', this.value, true);");
+
+			//leaving the original field for compatibility
+			inp.setAttribute("style", "width:70px;");
+			inp.setAttribute("onchange", "setColorPicker('"+ c + "', this.value, false);");
+			inp.parentNode.insertBefore(pick, inp.nextSibling);
+			return pick;
+		}
+		return null;
+	}
+
+	/**
+	 * Sets the value of an input field with the given name to the given hex color value.
+	 * If fromPicker is true, the value is assumed to be a CSS color string and is converted to a hex color value.
+	 * If fromPicker is false, the value is assumed to be a hex color value and no conversion is done.
+	 * @param {string} objname - the name of the input field to set.
+	 * @param {string} newval - the new value of the input field.
+	 * @param {boolean} fromPicker - whether the value is from a color picker (true) or not (false).
+	 */
+	function setColorPicker(objname,newval,fromPicker) {
+
+		if (fromPicker) {
+			const col = d.getElementsByName(objname);
+			for (let i = 0; i < collection.length; i++) {
+			  if (col[i].type !== "hidden") {
+				col[i].value = newval.slice(1).toUpperCase();
+				return;
+			  }
+			}		
+		} else {
+			obj = d.getElementsByName(objname)[0];
+			if (!obj) return;
+		    obj.value = "#" + newval; // add # 
+		}
+	}
+	
 	function svS(e) {
 		e.preventDefault();
 		if (d.Sf.checkValidity()) d.Sf.submit(); //https://stackoverflow.com/q/37323914
