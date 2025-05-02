@@ -26,7 +26,7 @@
 			urows="";
 			if (isO(umCfg)) {
 				for (const [k,o] of Object.entries(umCfg)) {
-					urows += `<hr><h3>${k}</h3>`;
+					urows += `<hr><h3 name="${k}">${k}</h3>`;
 					addField(k,'unknown',o);
 				}
 			}
@@ -108,7 +108,7 @@
 	}
 	function addField(k,f,o,a=false) {  //key, field, (sub)object, isArray
 		if (isO(o)) {
-			urows += '<hr class="sml">';
+			urows += '<hr class="sml" name="'+k+'-div">';
 			if (f!=='unknown' && !k.includes(":")) urows += `<p><u>${initCap(f)}</u></p>`; //show group title
 			for (const [s,v] of Object.entries(o)) {
 				// possibility to nest objects (only 1 level)
@@ -301,6 +301,34 @@
 	}
 
 	/**
+	 * Add a text element with the given text after the input element with the given name.
+	 * The text can be formatted with italic, bold, or underline by setting the corresponding
+	 * bit in the ibu parameter to 1. For example, to make the text bold and underlined, pass "011".
+	 * @param {string} elNameBefore - the name of the input element before which the text should be added. 
+	 *                   Use just the '<name of the usermod>' to add after the title of the usermod or
+	 *                   Use  the '<name of the usermod>-div' to add after divider below the title of the usermod. 
+	 * @param {string} txt - the text to add
+	 * @param {string} ibu - a 3-character string with the format bits: italic, bold, underline
+	 * NOTE: this function must be called (one or multiple times) before any other appendConfigData function 
+	 * so that the text is added and will be visualised in the correct order.
+	 */
+
+	function addTxt(elNameBefore,txt,ibu) {
+		let obj = d.getElementsByName(elNameBefore);
+		if (!obj.length) return;
+		if (typeof(ibu) !== "string" ||ibu.length != 3)  return;
+
+		if (ibu[0] == 1) txt = '<i>' + txt + '</i>';
+		if (ibu[1] == 1) txt = '<b>' + txt + '</b>';
+		if (ibu[2] == 1) txt = '<u>' + txt + '</u>';
+        let idx = 0;
+		if(obj.length>1){
+			idx = 1; // ignore hidden field
+			txt = '<br>' + txt ;
+		}
+		if (txt!="") obj[idx].insertAdjacentHTML('afterend', txt );
+	}
+	/**
 	 * Sets the value of an input field with the given name to the given hex color value.
 	 * If fromPicker is true, the value is assumed to be a CSS color string and is converted to a hex color value.
 	 * If fromPicker is false, the value is assumed to be a hex color value and no conversion is done.
@@ -312,7 +340,7 @@
 
 		if (fromPicker) {
 			const col = d.getElementsByName(objname);
-			for (let i = 0; i < collection.length; i++) {
+			for (let i = 0; i < col.length; i++) {
 			  if (col[i].type !== "hidden") {
 				col[i].value = newval.slice(1).toUpperCase();
 				return;
