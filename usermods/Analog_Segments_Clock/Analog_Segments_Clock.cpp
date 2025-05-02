@@ -546,9 +546,10 @@ public:
 
     void appendConfigData() override
     {
-        
-        oappend(F("addInfo('")); oappend(FPSTR(_name)); oappend(F(":Overlay Enabled")); oappend(F("',1,'<br><i>(FL: First Led; LL: Last Led)</i>');"));
-        oappend(F("addInfo('")); oappend(FPSTR(_name)); oappend(F(":H Color")); oappend(F("',1,'<br><i>(all colors in RRGGBB hex format)</i>');"));
+
+        oappend(F("addTxt('")); oappend(FPSTR(_name));  oappend(F("','version ")); oappend(getVersion().c_str()); oappend(F("','010');"));
+        oappend(F("addTxt('")); oappend(FPSTR(_name)); oappend(F(":Overlay Enabled")); oappend(F("','(FL: First Led; LL: Last Led)','100');"));
+        oappend(F("addTxt('")); oappend(FPSTR(_name)); oappend(F(":Hours Offset")); oappend(F("','All colors in RRGGBB hex format','101');"));
 
         oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','H Color');"));
         oappend(F("addCP('")); oappend(FPSTR(_name));oappend(F("','M Unit Color');"));
@@ -571,12 +572,7 @@ public:
         oappend(F("addOption(dd,'Cumulative',1);"));
         // oappend(F("addInfo('")); oappend(FPSTR(_name)); oappend(F(":Marking Mode")); oappend(F("',0,'<i>(0:single; 1:cumulative)</i>');"));
 
-        oappend(F("addInfo('"));
-        oappend(FPSTR(_name));
-        oappend(F(":Blend Colors"));
-        oappend(F("',1,'<br><hr style=\"width:50\%\"><b>Usermod v."));
-        oappend(getVersion().c_str());
-        oappend(F("</b>');"));
+
     }
 
     String getVersion()
@@ -586,7 +582,7 @@ public:
 };
 // add more strings here to reduce flash memory usage
 const char Analog_Segments_ClockUsermod::_name[] PROGMEM = "Analog Segments Clock";
-const char Analog_Segments_ClockUsermod::_version[] PROGMEM = "1.0.0";
+const char Analog_Segments_ClockUsermod::_version[] PROGMEM = "1.0.1";
 
 static Analog_Segments_ClockUsermod analog_segments_clock;
 REGISTER_USERMOD(analog_segments_clock);
